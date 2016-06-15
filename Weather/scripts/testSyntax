@@ -1,5 +1,6 @@
 #!/bin/bash 
 
+cd ..
 output="$(php -l displayResults.php)"
 
 if [ "$output" == "Errors parsing index.php" ]
