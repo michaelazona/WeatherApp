@@ -1,14 +1,19 @@
 <?php
 	
+	include 'phpFunctions/functions.php';
+
 	$city = $_GET['city'];
 	$zip  = $_GET['zip'];
 	$email = $_GET['email'];
+
+	addEmail($email, $city, $zip);
 
 ?>
 
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Weather App</title>
 		<script src="js/jquery-3.0.0.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito">
 		<link rel="stylesheet" type="text/css" href="css/defaults.css">
@@ -17,6 +22,22 @@
 	<body>
 
 		<script>
+
+			function timeStampConverter(timestamp)
+			{
+				var date = new Date(timestamp*1000);
+				var hours = date.getHours();
+
+				if(hours > 12)
+				{
+					hours = hours - 12;
+				}
+
+				var minutes = "0" + date.getMinutes();
+				var formattedTime = hours + ':' + minutes.substr(-2);
+
+				return formattedTime;
+			}
 
 			function capitalizeWords(phrase)
 			{
@@ -34,11 +55,13 @@
 			function processWeatherData(zip)
 			{
 				var openWeatherMapKey = "68a43d6f89f83e20ab0f5222d0fe958f";
-				var requestString     = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=68a43d6f89f83e20ab0f5222d0fe958f";
+				var requestString     = "http://api.openweathermap.org/data/2.5/weather?zip=" + zip + "&units=imperial&APPID=68a43d6f89f83e20ab0f5222d0fe958f";
 				
 				$.getJSON(requestString, function(data) {
 					var weather  = data.weather;
 					var tempData = data.main;
+					var sunrise  = timeStampConverter(data.sys.sunrise);
+					var sunset   = timeStampConverter(data.sys.sunset);
 
 					var icon = weather[0].icon;
 					var description = weather[0].description.toString();
@@ -48,7 +71,11 @@
 
 					document.getElementById("weatherIcon").innerHTML = "<img height=150 width=150 src='images/" + icon + ".png'/>";
 					document.getElementById("description").innerHTML = "<p id='info'>" + description + "</p>";
-					document.getElementById("temp").innerHTML = "Current Temp: " + temperature;
+					document.getElementById("temp").innerHTML = "Current Temp: " + temperature + "&deg;";
+
+					document.getElementById("sunrise").innerHTML = sunrise;
+					document.getElementById("sunset").innerHTML  = sunset;
+
 		        });
 			}
 
@@ -63,54 +90,45 @@
 				<div id = "weatherIcon"></div>
 				<div id = "description"></div><br>
 				<h2  id = "temp"></h2>
-			</div>
+
+				<table style="margin: auto">
+					<tr>
+						<td><h2 style = "margin: 0px">Sunrise: </h2></td>
+						<td><h2 id="sunrise"></h2></td>
+					</tr>
+
+					<tr>
+						<td><h2 style = "margin: 0px">Sunrise: </h2></td>
+						<td><h2 id="sunset"></h2></td>
+					</tr>
+				</table>
+			</div><br>
 
 			<hr style="width: 80%"><br>
 
 			<div style="width: 70%; margin: auto">
 				<p>The following information represents the state of weather for your city AT THE TIME YOU ENTERED IT.  Please refresh the page to get current weather information.</p>
-			</div>
+			</div><br>
+
+			<input type="button" class="button" value="New City" onclick = "returnHome()"/><br><br><br>
 
 		</div>
 
 		<script>
-			var city = <?php echo json_encode($city); ?>;
-			var zip  = <?php echo json_encode($zip); ?>;
 
+			var city = <?php echo json_encode($city); ?>;
+			city     = city.toLowerCase();
+
+			var zip  = <?php echo json_encode($zip); ?>;
+			
 			document.getElementById("cityName").innerHTML = "Current Weather For " + capitalizeWords(city);
 			processWeatherData(zip);
 
-			function submit()
+			function returnHome()
 			{
-				var zip = document.getElementById("zip").value;
-				var email = document.getElementById("email").value;
-				var city  = document.getElementById("city").value;
-
-				if(city == "")
-				{
-					alert("You didn't enter a city name.  Please fix and try again.");
-				}
-
-				else if(!validateZip(zip) && (!validateEmail(email) && email.length > 0))
-				{
-					alert("Both your zip code and your email address are invalid.  Please fix and try again."); 
-
-				}
-				else if(!validateZip(zip))  
-				{
-					alert("Your zip code is invalid.  Please fix and try again.");
-				}
-
-				else if(!validateEmail(email) && email.length > 0)
-				{
-					alert("Your email address is invalid.  Please fix and try again."); 
-				}
-
-				else
-				{
-					window.location.href = "displayResults.php?city=" + city + "&zip=" + zip + "&email=" + email;
-				}
+				window.location.href = "weatherAppDemo.html";
 			}
+			
 		</script>
 	</body>
 </html>
