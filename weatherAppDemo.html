@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="js/jquery-3.0.0.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito">
+		<link rel="stylesheet" type="text/css" href="css/defaults.css">
+	</head>
+
+	<body>
+
+		<script>
+
+			function validateZip(zip)
+			{
+				return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zip);
+			}
+
+			function validateEmail(email) 
+			{
+			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			    return re.test(email);
+			}
+
+			function checkNote()
+			{
+				if(document.getElementById("note").innerHTML.length == 31)
+				{
+					return true;
+				}
+
+				return false;
+			}
+
+			function checkZipAndCity(city, zip, submit=false)
+			{
+				$.ajax("phpFunctions/validateZip.php?city=" + city + "&zip=" + zip, {
+
+		     	    success: function(data) {
+		     	    	if(city.length > 0)
+		     	    	{
+			     	        if(data != "TRUE" && submit)
+			     	        {
+			     	        	document.getElementById("note").innerHTML = "&#10007; Your zip code and city don't match.";
+			     	        	alert("Your zip code and city don't match!  Please fix and try again.");
+			     	        }
+
+			     	        else if(data != "TRUE")
+			     	        {
+			     	        	document.getElementById("note").innerHTML = "&#10007; Your zip code and city don't match.";
+			     	        }
+
+			     	        else if(submit)
+			     	        {
+			     	        	window.location.href = "displayResults.php?city=" + city + "&zip=" + zip + "&email=" + email;
+			     	        }
+
+			     	        else
+			     	        {
+			     	      	   document.getElementById("note").innerHTML = "&#10003; Your zip code and city match!";
+			     	        }
+		     	    	}
+		     	    },
+
+		     	    error: function() {
+		     	        $('#notification-bar').text('An error occurred');
+		     	    },
+
+		     	});
+			}
+
+		</script>
+
+		<div id="container">
+			<h1>My Weather App</h1>
+			<hr style="width: 80%">
+
+			<div style="width: 70%; margin: auto">
+				<p>This app lets you look up the current weather, and then it also sends you automated emails every morning with the current weather!  All you have to do is enter your email address!</p>
+			</div>
+
+			<h1 style="font-size: 31px">City Name: </h1>
+			<input type="textbox" id="city" class="inputs" value=""/><br><br>
+
+			<h1 style="font-size: 31px">Zip Code: </h1>
+			<input type="textbox" id="zip" class="inputs" onkeyup="callCheckAndDisplay()" value=""/><br>
+			<p style="color: #666666" id="note">*Note: please make sure your city and zip code are accurate!</p>
+
+			<h1 style="font-size: 31px">Email Address (optional): </h1>
+			<input type="textbox" id="email" class="inputs" value=""/><br><br><br><br>
+
+
+			<input type="button" class="button" value="Submit" onclick="submit()"/><br><br><br>
+
+		</div>
+
+		<script>
+			function callCheckAndDisplay()
+			{
+				var city = document.getElementById("city").value;
+				var zip  = document.getElementById("zip").value;
+
+				if(city.length > 0){ checkZipAndCity(city, zip); }
+			}
+
+			function submit()
+			{
+
+				var city = document.getElementById("city").value;
+				var zip = document.getElementById("zip").value;
+				var email = document.getElementById("email").value;
+
+				if(!validateZip(zip) && (!validateEmail(email) && email.length > 0))
+				{
+					alert("Both your zip code and your email address are invalid.  Please fix and try again."); 
+
+				}
+				else if(!validateZip(zip))  
+				{
+					alert("Your zip code is invalid.  Please fix and try again.");
+				}
+
+				else if(!validateZip(email) && email.length > 0)
+				{
+					alert("Your email address is invalid.  Please fix and try again."); 
+				}
+
+				else
+				{
+					checkZipAndCity(city, zip, true);
+				}
+				
+			}
+		</script>
+	</body>
+</html>
