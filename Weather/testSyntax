@@ -1,0 +1,10 @@
+#!/bin/bash 
+
+output="$(php -l displayResults.php)"
+
+if [ "$output" == "Errors parsing index.php" ]
+then
+	exit 1
+fi
+
+echo $output
