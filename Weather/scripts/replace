@@ -3,4 +3,5 @@
 whoami
 pwd
 cd ..
+cd ..
 sudo cp -r Weather /var/www/html
