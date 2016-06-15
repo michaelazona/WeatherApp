@@ -53,7 +53,7 @@ var assert = require('chai').assert;
 
 describe('validateZip', function() {
     it('it should return true if the zip code is valid', function () {
-      assert.equal(false, validateZip("55431"));
+      assert.equal(true, validateZip("55431"));
       assert.equal(false, validateZip("554319"));
     });
 });
