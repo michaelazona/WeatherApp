@@ -1,0 +1,9 @@
+#!/bin/bash
+
+whoami
+pwd
+sudo cp -r mikeWebApp.php /var/www/html/mikeWebApp.php
+sudo cp -r updateDatabase.php /var/www/html/updateDatabase.php
+sudo cp -fR css /var/www/html
+sudo cp -fR js /var/www/html
+sudo cp -fR Misc /var/www/html
