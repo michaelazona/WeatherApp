@@ -6,8 +6,11 @@
 	$zip  = $_GET['zip'];
 	$email = $_GET['email'];
 
-	addEmail($email, $city, $zip);
-
+	if($email != "")
+	{
+		addEmail($email, $city, $zip);
+	}
+	
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +18,7 @@
 	<head>
 		<title>Weather App</title>
 		<script src="js/jquery-3.0.0.js"></script>
+		<script src="js/jsFunctions.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito">
 		<link rel="stylesheet" type="text/css" href="css/defaults.css">
 	</head>
@@ -22,35 +26,6 @@
 	<body>
 
 		<script>
-
-			function timeStampConverter(timestamp)
-			{
-				var date = new Date(timestamp*1000);
-				var hours = date.getHours();
-
-				if(hours > 12)
-				{
-					hours = hours - 12;
-				}
-
-				var minutes = "0" + date.getMinutes();
-				var formattedTime = hours + ':' + minutes.substr(-2);
-
-				return formattedTime;
-			}
-
-			function capitalizeWords(phrase)
-			{
-				phrase = phrase.split(" ");
-
-				for(var i = 0; i < phrase.length; i++)
-				{
-					phrase[i] = phrase[i].charAt(0).toUpperCase() + phrase[i].slice(1);
-				}
-
-				phrase = phrase.join().replace(",", " ");
-				return phrase;
-			}
 			
 			function processWeatherData(zip)
 			{

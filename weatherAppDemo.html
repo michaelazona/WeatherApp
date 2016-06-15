@@ -3,6 +3,7 @@
 	<head>
 		<title>Weather App</title>
 		<script src="js/jquery-3.0.0.js"></script>
+		<script src="js/jsFunctions.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito">
 		<link rel="stylesheet" type="text/css" href="css/defaults.css">
 	</head>
@@ -10,17 +11,6 @@
 	<body>
 
 		<script>
-
-			function validateZip(zip)
-			{
-				return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zip);
-			}
-
-			function validateEmail(email) 
-			{
-			    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    			return re.test(email);
-			}
 
 			function mostRecentSearches()
 			{
