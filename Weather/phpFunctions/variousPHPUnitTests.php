@@ -8,7 +8,7 @@
 		public function testSqlStatementToAddEmail()
 		{
 			$sql = "INSERT INTO `emails` (`email`, `lastCity`, `lastZip`) VALUES ('donald@duck.com', 'Disney World', '32830')";
-			$this->assertEquals(assembleSQLForAddingEmail("dnald@duck.com", "Disney World", "32830"), $sql);
+			$this->assertEquals(assembleSQLForAddingEmail("donald@duck.com", "Disney World", "32830"), $sql);
 		}
 
 		//checks to make sure database can still be connected to - incase someone messed with the credentials, dbname, etc.
