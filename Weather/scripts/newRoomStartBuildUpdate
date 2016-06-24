@@ -1,0 +1,6 @@
+#!/bin/bash
+
+newRoomId=$(curl https://api.ciscospark.com/v1/rooms -sS -X POST -H "Authorization:Bearer NmI5ZDUxZWUtZjljMi00MzUzLWE1NjktMjE4MWVkNjVmMWIzMWZlY2ZmODktYzBl" --data "title=Test Room 2" | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"]')
+echo $newRoomId
+
+curl https://api.ciscospark.com/v1/messages -X POST -H "Authorization:Bearer NmI5ZDUxZWUtZjljMi00MzUzLWE1NjktMjE4MWVkNjVmMWIzMWZlY2ZmODktYzBl" --data "roomId=${newRoomId}" --data "text=$JOB_NAME - $BUILD_NUMBER has started!"
